@@ -17,5 +17,33 @@ pipeline {
         sh 'node --version'
       }
     }
-  }
+   agent {
+        // Use the official OpenJDK Docker image
+        docker {
+            image 'openjdk:11'
+            label 'docker'
+        }
+    }
+        stage('Build') {
+            steps {
+                // Compile the Java code
+                sh 'javac HelloWorld.java'
+            }
+        }
+
+        stage('Run') {
+            steps {
+                // Run the compiled Java program
+                sh 'java HelloWorld'
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up workspace after the pipeline run
+            cleanWs()
+         }
+      }
+   }
 }
